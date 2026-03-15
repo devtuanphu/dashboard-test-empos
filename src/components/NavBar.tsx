@@ -79,7 +79,7 @@ const actionButtons: ActionBtn[] = [
   { label: 'Thu ngân', iconKey: 'cashier' },
 ];
 
-function NavIcon({ iconKey, fill, size = 20 }: { iconKey: string; fill: string; size?: number }) {
+function NavIcon({ iconKey, fill, size = 14 }: { iconKey: string; fill: string; size?: number }) {
   const icon = icons[iconKey];
   if (!icon) return null;
   return (
@@ -97,20 +97,21 @@ function NavIcon({ iconKey, fill, size = 20 }: { iconKey: string; fill: string; 
 
 const NavBar: React.FC = () => {
   return (
-    <div className="bg-white border-b flex items-center justify-between px-[56px] h-[56px]" style={{ borderColor: 'rgba(210,205,219,0.5)' }}>
+    <div className="bg-white border-b flex items-center justify-between px-4 md:px-8 lg:px-14 h-[56px]" style={{ borderColor: 'rgba(210,205,219,0.5)' }}>
       {/* Left - Menu items */}
       <div className="flex items-center">
         {navItems.map((item, i) => (
           <button
             key={item.label}
-            className={`flex gap-1 items-center justify-center py-2 rounded-lg ${i === 0 ? 'pr-[16px]' : 'px-[16px]'}`}
+            className={`flex gap-0.5 xl:gap-1 items-center justify-center py-2 rounded-lg ${i === 0 ? 'pr-1.5 xl:pr-3 2xl:pr-[16px]' : 'px-1.5 xl:px-3 2xl:px-[16px]'}`}
           >
             <NavIcon
               iconKey={item.iconKey}
               fill={item.active ? '#119C72' : (item.defaultFill || '#35313C')}
+              size={14}
             />
             <span
-              className={`text-[15px] leading-5 whitespace-nowrap text-center ${item.active ? 'font-semibold' : 'font-medium'}`}
+              className={`text-[11px] xl:text-[13px] 2xl:text-[15px] leading-5 whitespace-nowrap text-center ${item.active ? 'font-semibold' : 'font-medium'}`}
               style={{ color: item.active ? '#119c72' : '#35313c' }}
             >
               {item.label}
@@ -120,15 +121,15 @@ const NavBar: React.FC = () => {
       </div>
 
       {/* Right - Action buttons */}
-      <div className="flex gap-1 items-center">
+      <div className="flex gap-1 items-center shrink-0 ml-1">
         {actionButtons.map((btn) => (
           <button
             key={btn.label}
-            className="flex gap-1 items-center justify-center px-2 py-2 rounded-lg"
+            className="flex gap-0.5 xl:gap-1 items-center justify-center px-1.5 xl:px-2 py-1.5 rounded-lg"
             style={{ background: '#119c72' }}
           >
-            <NavIcon iconKey={btn.iconKey} fill="#CFFFF0" />
-            <span className="text-[15px] font-medium leading-5 whitespace-nowrap text-center" style={{ color: '#cffff0' }}>
+            <NavIcon iconKey={btn.iconKey} fill="#CFFFF0" size={14} />
+            <span className="text-[11px] xl:text-[13px] 2xl:text-[15px] font-medium leading-5 whitespace-nowrap text-center" style={{ color: '#cffff0' }}>
               {btn.label}
             </span>
           </button>

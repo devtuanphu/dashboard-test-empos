@@ -114,37 +114,38 @@ export default function DashboardPage() {
       <NavBar />
 
       {/* Main Content */}
-      <div className="px-14 py-2">
-        <div className="grid grid-cols-12 gap-2">
+      <div className="px-4 md:px-8 lg:px-14 py-2">
+        {/* Top section: main content + right sidebar */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-2">
           {/* Left Column - Main content */}
-          <div className="col-span-9 flex flex-col gap-2 w-full">
-            {/* Stat Cards - 3x2 Grid */}
-            <div className="grid grid-cols-3 gap-2">
+          <div className="lg:col-span-9 flex flex-col gap-2 w-full">
+            {/* Stat Cards - responsive grid */}
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
               {statCards.map((card, index) => (
                 <StatCard key={index} {...card} />
               ))}
             </div>
 
             {/* Charts Row */}
-            <div className="grid grid-cols-2 gap-2">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
               <RevenueChart />
               <ExpenseChart />
             </div>
           </div>
 
           {/* Right Column */}
-          <div className="col-span-3 flex flex-col gap-2">
+          <div className="lg:col-span-3 flex flex-col gap-2">
             <AppDownload />
             <RecentActivity />
           </div>
         </div>
 
         {/* Bottom Row */}
-        <div className="grid grid-cols-12 gap-2 mt-2">
-          <div className="col-span-6">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-2 mt-2">
+          <div className="md:col-span-6">
             <BestSellers />
           </div>
-          <div className="col-span-6">
+          <div className="md:col-span-6">
             <BranchRevenue />
           </div>
         </div>

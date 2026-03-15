@@ -70,22 +70,16 @@ const BranchRevenue: React.FC = () => {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  // Donut chart — thick ring matching Figma
-  const chartSize = 310;
-  const cxy = chartSize / 2; // 155
-  const outerR = 140;
-  const innerR = 58; // smaller inner = thicker ring inward
-
   return (
-    <div className="bg-white rounded-lg p-4 w-full h-full relative overflow-visible" style={{ boxShadow: '0px 6px 16px 0px rgba(0,0,0,0.1)' }}>
+    <div className="bg-white rounded-lg p-4 w-full h-full relative overflow-hidden" style={{ boxShadow: '0px 6px 16px 0px rgba(0,0,0,0.1)' }}>
       {/* Header */}
       <div className="flex items-start justify-between mb-0">
-        <h3 className="text-[20px] font-semibold leading-[26px]" style={{ color: '#35313c' }}>
+        <h3 className="text-[16px] xl:text-[20px] font-semibold leading-[22px] xl:leading-[26px]" style={{ color: '#35313c' }}>
           Doanh thu theo chi nhánh
         </h3>
         <div className="relative" ref={dropdownRef}>
           <button
-            className="flex items-center gap-1 text-[15px] font-medium py-2 rounded-lg"
+            className="flex items-center gap-1 text-[13px] xl:text-[15px] font-medium py-2 rounded-lg whitespace-nowrap"
             style={{ color: '#35313c' }}
             onClick={() => setShowDropdown(!showDropdown)}
           >
@@ -114,22 +108,22 @@ const BranchRevenue: React.FC = () => {
         </div>
       </div>
 
-      <div className="flex items-start">
+      <div className="flex flex-row items-start">
         {/* Branch list */}
-        <div className="flex flex-col gap-2 shrink-0" style={{ width: '220px' }}>
+        <div className="flex flex-col gap-1 xl:gap-2 shrink-0 w-[140px] xl:w-[220px]">
           {branches.map((branch) => (
-            <div key={branch.rank} className="flex items-center gap-4">
+            <div key={branch.rank} className="flex items-center gap-2 xl:gap-4">
               <div
-                className="w-8 h-8 rounded-full flex items-center justify-center text-white text-[20px] font-semibold shrink-0 leading-[26px]"
+                className="w-6 h-6 xl:w-8 xl:h-8 rounded-full flex items-center justify-center text-white text-[14px] xl:text-[20px] font-semibold shrink-0 leading-[20px] xl:leading-[26px]"
                 style={{ background: branch.color }}
               >
                 {branch.rank}
               </div>
               <div className="flex flex-col">
-                <span className="text-[17px] font-semibold leading-6" style={{ color: '#35313c' }}>
+                <span className="text-[13px] xl:text-[17px] font-semibold leading-5 xl:leading-6" style={{ color: '#35313c' }}>
                   {branch.name}
                 </span>
-                <span className="text-[12px] leading-4" style={{ color: '#dd980a' }}>
+                <span className="text-[10px] xl:text-[12px] leading-3 xl:leading-4" style={{ color: '#dd980a' }}>
                   {branch.percentage}
                 </span>
               </div>
@@ -137,15 +131,15 @@ const BranchRevenue: React.FC = () => {
           ))}
         </div>
 
-        {/* Donut Chart - matching Figma 288px with exact inner/outer ratio */}
-        <div className="flex-1 flex items-center justify-center">
-          <PieChart width={chartSize} height={chartSize}>
+        {/* Donut Chart */}
+        <div className="flex-1 flex items-center justify-center py-2">
+          <PieChart width={250} height={250}>
             <Pie
               data={branches}
-              cx={cxy}
-              cy={cxy}
-              innerRadius={innerR}
-              outerRadius={outerR}
+              cx={125}
+              cy={125}
+              innerRadius={50}
+              outerRadius={105}
               paddingAngle={2}
               dataKey="value"
               startAngle={90}
@@ -162,7 +156,7 @@ const BranchRevenue: React.FC = () => {
                 value="Doanh thu"
                 position="center"
                 fill="#212023"
-                fontSize={15}
+                fontSize={14}
                 fontWeight={600}
               />
             </Pie>

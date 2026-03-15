@@ -1,101 +1,157 @@
-import Image from "next/image";
+'use client';
 
-export default function Home() {
+import React from 'react';
+import TopBar from '@/components/TopBar';
+import NavBar from '@/components/NavBar';
+import StatCard from '@/components/StatCard';
+import RevenueChart from '@/components/RevenueChart';
+import ExpenseChart from '@/components/ExpenseChart';
+import RecentActivity from '@/components/RecentActivity';
+import AppDownload from '@/components/AppDownload';
+import BestSellers from '@/components/BestSellers';
+import BranchRevenue from '@/components/BranchRevenue';
+import FloatingButtons from '@/components/FloatingButtons';
+
+// Stat card icon components — exact SVG paths from Figma
+const EditDocumentIcon = () => (
+  <svg width="20" height="21" viewBox="0 0 25.3333 26.6667" fill="none">
+    <path d="M2.66667 26.6667C1.93333 26.6667 1.30556 26.4056 0.783333 25.8833C0.261111 25.3611 0 24.7333 0 24V2.66667C0 1.93333 0.261111 1.30556 0.783333 0.783333C1.30556 0.261111 1.93333 0 2.66667 0H12.2333C12.5889 0 12.9278 0.0666667 13.25 0.2C13.5722 0.333333 13.8556 0.522222 14.1 0.766667L20.5667 7.23333C20.8111 7.47778 21 7.76111 21.1333 8.08333C21.2667 8.40556 21.3333 8.74444 21.3333 9.1V11.2C21.3333 11.4444 21.2611 11.6556 21.1167 11.8333C20.9722 12.0111 20.7889 12.1444 20.5667 12.2333C20.2111 12.3667 19.8722 12.5389 19.55 12.75C19.2278 12.9611 18.9333 13.2 18.6667 13.4667L11.4667 20.6667C11.2222 20.9111 11.0278 21.1944 10.8833 21.5167C10.7389 21.8389 10.6667 22.1778 10.6667 22.5333V25.3333C10.6667 25.7111 10.5389 26.0278 10.2833 26.2833C10.0278 26.5389 9.71111 26.6667 9.33333 26.6667H2.66667ZM13.3333 25.3333V23.1333C13.3333 22.9556 13.3667 22.7833 13.4333 22.6167C13.5 22.45 13.6 22.3 13.7333 22.1667L20.7 15.2333C20.9 15.0333 21.1222 14.8889 21.3667 14.8C21.6111 14.7111 21.8556 14.6667 22.1 14.6667C22.3667 14.6667 22.6222 14.7167 22.8667 14.8167C23.1111 14.9167 23.3333 15.0667 23.5333 15.2667L24.7667 16.5C24.9444 16.7 25.0833 16.9222 25.1833 17.1667C25.2833 17.4111 25.3333 17.6556 25.3333 17.9C25.3333 18.1444 25.2889 18.3944 25.2 18.65C25.1111 18.9056 24.9667 19.1333 24.7667 19.3333L17.8333 26.2667C17.7 26.4 17.55 26.5 17.3833 26.5667C17.2167 26.6333 17.0444 26.6667 16.8667 26.6667H14.6667C14.2889 26.6667 13.9722 26.5389 13.7167 26.2833C13.4611 26.0278 13.3333 25.7111 13.3333 25.3333ZM22.1 19.2L23.3333 17.9L22.1 16.6667L20.8333 17.9333L22.1 19.2ZM13.3333 9.33333H18.6667L12 2.66667V8C12 8.37778 12.1278 8.69444 12.3833 8.95C12.6389 9.20556 12.9556 9.33333 13.3333 9.33333Z" fill="#119C72"/>
+  </svg>
+);
+
+const PaidIcon = () => (
+  <svg width="20" height="20" viewBox="0 0 26.6667 26.6667" fill="none">
+    <path d="M12.1333 22.6667H14.4667V21C15.5778 20.8 16.5333 20.3667 17.3333 19.7C18.1333 19.0333 18.5333 18.0444 18.5333 16.7333C18.5333 15.8 18.2667 14.9444 17.7333 14.1667C17.2 13.3889 16.1333 12.7111 14.5333 12.1333C13.2 11.6889 12.2778 11.3 11.7667 10.9667C11.2556 10.6333 11 10.1778 11 9.6C11 9.02222 11.2056 8.56667 11.6167 8.23333C12.0278 7.9 12.6222 7.73333 13.4 7.73333C14.1111 7.73333 14.6667 7.90556 15.0667 8.25C15.4667 8.59444 15.7556 9.02222 15.9333 9.53333L18.0667 8.66667C17.8222 7.88889 17.3722 7.21111 16.7167 6.63333C16.0611 6.05556 15.3333 5.73333 14.5333 5.66667V4H12.2V5.66667C11.0889 5.91111 10.2222 6.4 9.6 7.13333C8.97778 7.86667 8.66667 8.68889 8.66667 9.6C8.66667 10.6444 8.97222 11.4889 9.58333 12.1333C10.1944 12.7778 11.1556 13.3333 12.4667 13.8C13.8667 14.3111 14.8389 14.7667 15.3833 15.1667C15.9278 15.5667 16.2 16.0889 16.2 16.7333C16.2 17.4667 15.9389 18.0056 15.4167 18.35C14.8944 18.6944 14.2667 18.8667 13.5333 18.8667C12.8 18.8667 12.15 18.6389 11.5833 18.1833C11.0167 17.7278 10.6 17.0444 10.3333 16.1333L8.13333 17C8.44444 18.0667 8.92778 18.9278 9.58333 19.5833C10.2389 20.2389 11.0889 20.6889 12.1333 20.9333V22.6667ZM13.3333 26.6667C11.4889 26.6667 9.75555 26.3167 8.13333 25.6167C6.51111 24.9167 5.1 23.9667 3.9 22.7667C2.7 21.5667 1.75 20.1556 1.05 18.5333C0.35 16.9111 0 15.1778 0 13.3333C0 11.4889 0.35 9.75555 1.05 8.13333C1.75 6.51111 2.7 5.1 3.9 3.9C5.1 2.7 6.51111 1.75 8.13333 1.05C9.75555 0.35 11.4889 0 13.3333 0C15.1778 0 16.9111 0.35 18.5333 1.05C20.1556 1.75 21.5667 2.7 22.7667 3.9C23.9667 5.1 24.9167 6.51111 25.6167 8.13333C26.3167 9.75555 26.6667 11.4889 26.6667 13.3333C26.6667 15.1778 26.3167 16.9111 25.6167 18.5333C24.9167 20.1556 23.9667 21.5667 22.7667 22.7667C21.5667 23.9667 20.1556 24.9167 18.5333 25.6167C16.9111 26.3167 15.1778 26.6667 13.3333 26.6667Z" fill="#119C72"/>
+  </svg>
+);
+
+const RoomServiceIcon = () => (
+  <svg width="20" height="15" viewBox="0 0 26.6667 20" fill="none">
+    <path d="M1.33333 20C0.955556 20 0.638889 19.8722 0.383333 19.6167C0.127778 19.3611 0 19.0444 0 18.6667C0 18.2889 0.127778 17.9722 0.383333 17.7167C0.638889 17.4611 0.955556 17.3333 1.33333 17.3333H25.3333C25.7111 17.3333 26.0278 17.4611 26.2833 17.7167C26.5389 17.9722 26.6667 18.2889 26.6667 18.6667C26.6667 19.0444 26.5389 19.3611 26.2833 19.6167C26.0278 19.8722 25.7111 20 25.3333 20H1.33333ZM1.33333 16V14.6667C1.33333 11.8222 2.20556 9.31111 3.95 7.13333C5.69444 4.95556 7.93333 3.57778 10.6667 3V2.66667C10.6667 1.93333 10.9278 1.30556 11.45 0.783333C11.9722 0.261111 12.6 0 13.3333 0C14.0667 0 14.6944 0.261111 15.2167 0.783333C15.7389 1.30556 16 1.93333 16 2.66667V3C18.7556 3.57778 21 4.95556 22.7333 7.13333C24.4667 9.31111 25.3333 11.8222 25.3333 14.6667V16H1.33333Z" fill="#119C72"/>
+  </svg>
+);
+
+const RequestQuoteIcon = () => (
+  <svg width="14" height="18" viewBox="0 0 18.6667 24" fill="none">
+    <path d="M9.12833 19V19.846C9.12833 19.976 9.177 20.0898 9.27433 20.1873C9.37189 20.2847 9.48555 20.3333 9.61533 20.3333H9.923C10.0666 20.3333 10.1922 20.2794 10.3 20.1717C10.4078 20.0641 10.4617 19.9386 10.4617 19.795V19H12.4617C12.6506 19 12.8089 18.9361 12.9367 18.8083C13.0644 18.6806 13.1283 18.5222 13.1283 18.3333V14.3333C13.1283 14.1444 13.0644 13.9861 12.9367 13.8583C12.8089 13.7306 12.6506 13.6667 12.4617 13.6667H7.795V11H12.4617C12.6506 11 12.8089 10.936 12.9367 10.808C13.0644 10.68 13.1283 10.5214 13.1283 10.3323C13.1283 10.1432 13.0644 9.985 12.9367 9.85767C12.8089 9.73033 12.6506 9.66667 12.4617 9.66667H10.4617V8.82067C10.4617 8.69067 10.4129 8.57689 10.3153 8.47933C10.218 8.382 10.1043 8.33333 9.97433 8.33333H9.66667C9.52311 8.33333 9.39744 8.38722 9.28967 8.495C9.18211 8.60256 9.12833 8.72811 9.12833 8.87167V9.66667H7.12833C6.93944 9.66667 6.78111 9.73056 6.65333 9.85833C6.52556 9.98611 6.46167 10.1444 6.46167 10.3333V14.3333C6.46167 14.5222 6.52556 14.6806 6.65333 14.8083C6.78111 14.9361 6.93944 15 7.12833 15H11.795V17.6667H7.12833C6.93944 17.6667 6.78111 17.7307 6.65333 17.8587C6.52556 17.9867 6.46167 18.1452 6.46167 18.3343C6.46167 18.5234 6.52556 18.6817 6.65333 18.809C6.78111 18.9363 6.93944 19 7.12833 19H9.12833ZM2.154 24C1.54022 24 1.02778 23.7944 0.616667 23.3833C0.205556 22.9722 0 22.4598 0 21.846V2.154C0 1.54022 0.205556 1.02778 0.616667 0.616667C1.02778 0.205556 1.54022 0 2.154 0H12.9743L18.6667 5.69233V21.846C18.6667 22.4598 18.4611 22.9722 18.05 23.3833C17.6389 23.7944 17.1264 24 16.5127 24H2.154ZM12.3077 1.33333V5.282C12.3077 5.58711 12.4109 5.84289 12.6173 6.04933C12.8238 6.25578 13.0796 6.359 13.3847 6.359H17.3333L12.3077 1.33333Z" fill="#119C72"/>
+  </svg>
+);
+
+const CreditScoreIcon = () => (
+  <svg width="18" height="15" viewBox="0 0 24 20.2873" fill="none">
+    <path d="M2.154 18.6667C1.54022 18.6667 1.02778 18.4611 0.616667 18.05C0.205556 17.6389 0 17.1264 0 16.5127V2.154C0 1.54022 0.205556 1.02778 0.616667 0.616667C1.02778 0.205556 1.54022 0 2.154 0H21.846C22.4598 0 22.9722 0.205556 23.3833 0.616667C23.7944 1.02778 24 1.54022 24 2.154V7.43833C24 7.66411 23.9201 7.85689 23.7603 8.01667C23.6006 8.17644 23.4078 8.25633 23.182 8.25633C22.6351 8.25633 22.1249 8.36022 21.6513 8.568C21.1778 8.77556 20.7504 9.07 20.3693 9.45133L15.523 14.3307L14.446 13.236C13.6853 12.4753 12.7777 12.0962 11.723 12.0987C10.6683 12.1013 9.76067 12.483 9 13.2437C8.35733 13.8863 7.98856 14.6243 7.89367 15.4577C7.79878 16.291 7.94533 17.0709 8.33333 17.7973C8.44956 17.9907 8.45511 18.1839 8.35 18.377C8.24489 18.5701 8.09578 18.6667 7.90267 18.6667H2.154ZM1.33333 5.077V8.25633H22.6667V5.077H1.33333ZM15.523 18.8153L22.6283 11.7103C22.7581 11.5803 22.9123 11.5123 23.091 11.5063C23.2697 11.5003 23.4324 11.5709 23.5793 11.718C23.7213 11.8649 23.7936 12.0221 23.796 12.1897C23.7987 12.3572 23.7264 12.5146 23.5793 12.6617L16.277 19.964C16.1608 20.0802 16.042 20.1631 15.9207 20.2127C15.7991 20.2624 15.6666 20.2873 15.523 20.2873C15.3966 20.2873 15.2683 20.2624 15.1383 20.2127C15.0086 20.1631 14.8856 20.0802 14.7693 19.964L11.2513 16.446C11.1264 16.3213 11.0584 16.1697 11.0473 15.991C11.0362 15.8123 11.1042 15.6496 11.2513 15.5027C11.3931 15.3607 11.5491 15.2897 11.7193 15.2897C11.8893 15.2897 12.0479 15.3607 12.195 15.5027L15.523 18.8153Z" fill="#119C72"/>
+  </svg>
+);
+
+const AssignmentReturnIcon = () => (
+  <svg width="16" height="18" viewBox="0 0 21.3333 24" fill="none">
+    <path d="M8.818 14H14.4103C14.5992 14 14.7576 13.936 14.8853 13.808C15.0131 13.68 15.077 13.5214 15.077 13.3323C15.077 13.1432 15.0131 12.985 14.8853 12.8577C14.7576 12.7303 14.5992 12.6667 14.4103 12.6667H8.818L11.146 10.3383C11.2709 10.2137 11.3376 10.062 11.346 9.88333C11.3547 9.70467 11.2837 9.54 11.133 9.38933C10.9948 9.25111 10.8393 9.182 10.6667 9.182C10.494 9.182 10.3368 9.253 10.195 9.395L7.01033 12.5793C6.795 12.7949 6.68733 13.0462 6.68733 13.3333C6.68733 13.6204 6.795 13.8718 7.01033 14.0873L10.195 17.2717C10.3197 17.3966 10.4713 17.4646 10.65 17.4757C10.8287 17.4868 10.9933 17.417 11.144 17.2663C11.2822 17.1281 11.3513 16.9727 11.3513 16.8C11.3513 16.6273 11.2803 16.4701 11.1383 16.3283L8.818 14ZM2.154 24C1.56156 24 1.05444 23.7891 0.632667 23.3673C0.210889 22.9456 0 22.4384 0 21.846V4.82067C0 4.22822 0.210889 3.72111 0.632667 3.29933C1.05444 2.87755 1.56156 2.66667 2.154 2.66667H8.42067C8.29911 1.98622 8.46189 1.37167 8.909 0.823C9.35589 0.274333 9.946 0 10.6793 0C11.4127 0 12.0029 0.274333 12.45 0.823C12.8971 1.37167 13.0513 1.98622 12.9127 2.66667H19.1793C19.7718 2.66667 20.2789 2.87755 20.7007 3.29933C21.1224 3.72111 21.3333 4.22822 21.3333 4.82067V21.846C21.3333 22.4384 21.1224 22.9456 20.7007 23.3673C20.2789 23.7891 19.7718 24 19.1793 24H2.154ZM10.6667 3.25633C10.9556 3.25633 11.1944 3.16189 11.3833 2.973C11.5722 2.78411 11.6667 2.54522 11.6667 2.25633C11.6667 1.96744 11.5722 1.72856 11.3833 1.53967C11.1944 1.35078 10.9556 1.25633 10.6667 1.25633C10.3778 1.25633 10.1389 1.35078 9.95 1.53967C9.76111 1.72856 9.66667 1.96744 9.66667 2.25633C9.66667 2.54522 9.76111 2.78411 9.95 2.973C10.1389 3.16189 10.3778 3.25633 10.6667 3.25633Z" fill="#119C72"/>
+  </svg>
+);
+
+const statCards = [
+  {
+    icon: <EditDocumentIcon />,
+    iconBg: '#F3F3F7',
+    label: 'Số đơn',
+    value: '240',
+    percentage: '7.45%',
+    trend: 'up' as const,
+  },
+  {
+    icon: <PaidIcon />,
+    iconBg: '#F3F3F7',
+    label: 'Tiền mặt',
+    value: '999tr',
+    percentage: '7.45%',
+    trend: 'up' as const,
+  },
+  {
+    icon: <RoomServiceIcon />,
+    iconBg: '#F3F3F7',
+    label: 'Bàn đang sử dụng',
+    value: (
+      <span>
+        <span style={{ color: '#119c72' }}>5</span>
+        <span>/12</span>
+      </span>
+    ),
+  },
+  {
+    icon: <RequestQuoteIcon />,
+    iconBg: '#F3F3F7',
+    label: 'Đơn khách đặt',
+    value: '80',
+    percentage: '7.45%',
+    trend: 'up' as const,
+  },
+  {
+    icon: <CreditScoreIcon />,
+    iconBg: '#F3F3F7',
+    label: 'Chuyển khoản',
+    value: '999tr',
+    percentage: '7.45%',
+    trend: 'up' as const,
+  },
+  {
+    icon: <AssignmentReturnIcon />,
+    iconBg: '#F3F3F7',
+    label: 'Trả hàng',
+    value: '5',
+    percentage: '7.45%',
+    trend: 'down' as const,
+  },
+];
+
+export default function DashboardPage() {
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="https://nextjs.org/icons/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+    <div className="min-h-screen" style={{ background: '#f0f0f4' }}>
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="https://nextjs.org/icons/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+      {/* Top Bar */}
+      <TopBar />
+
+      {/* Navigation Bar */}
+      <NavBar />
+
+      {/* Main Content */}
+      <div className="px-14 py-2">
+        <div className="grid grid-cols-12 gap-2">
+          {/* Left Column - Main content */}
+          <div className="col-span-9 flex flex-col gap-2 w-full">
+            {/* Stat Cards - 3x2 Grid */}
+            <div className="grid grid-cols-3 gap-2">
+              {statCards.map((card, index) => (
+                <StatCard key={index} {...card} />
+              ))}
+            </div>
+
+            {/* Charts Row */}
+            <div className="grid grid-cols-2 gap-2">
+              <RevenueChart />
+              <ExpenseChart />
+            </div>
+          </div>
+
+          {/* Right Column */}
+          <div className="col-span-3 flex flex-col gap-2">
+            <AppDownload />
+            <RecentActivity />
+          </div>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+
+        {/* Bottom Row */}
+        <div className="grid grid-cols-12 gap-2 mt-2">
+          <div className="col-span-6">
+            <BestSellers />
+          </div>
+          <div className="col-span-6">
+            <BranchRevenue />
+          </div>
+        </div>
+      </div>
+
+      {/* Floating action buttons */}
+      <FloatingButtons />
     </div>
   );
 }

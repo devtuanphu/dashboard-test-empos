@@ -3,25 +3,49 @@
 @tailwind utilities;
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Brand Colors */
+  --brand-primary: #119c72;
+  --brand-inverse: #cffff0;
+
+  /* Text Colors */
+  --text-primary: #35313c;
+  --text-secondary: #5f5a6a;
+  --text-success: #0c9060;
+  --text-error: #dd415c;
+
+  /* Background */
+  --bg-page: #f0f0f4;
+  --bg-white: #ffffff;
+
+  /* Misc */
+  --border-light: rgba(210, 205, 219, 0.5);
+  --shadow-card: 0px 6px 16px 0px rgba(0, 0, 0, 0.1);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  color: var(--text-primary);
+  background: var(--bg-page);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #d2cddbb0;
+  border-radius: 3px;
 }
